@@ -1,0 +1,46 @@
+telegram:
+  bot_token: "123456789:YOUR_BOT_TOKEN_HERE"
+  chat_id: "123456789"
+  enabled: true
+
+scanner:
+  headless: false
+  scan_interval_seconds: 900
+  page_load_timeout_ms: 45000
+  post_load_wait_ms: 3000
+  max_listings_per_watch: 50
+  storage_state_path: "data/browser_state.json"
+
+state:
+  seen_items_path: "data/seen_listings.json"
+
+openai:
+  api_key: "sk-proj-YOUR_OPENAI_API_KEY_HERE"
+  org_id: "org-YOUR_ORG_ID_HERE"   # optional — remove this line if you don't have one
+  model: "gpt-4o-mini"              # gpt-4o-mini is fast and cheap; use gpt-4o for better analysis
+  enabled: true                     # set false to disable AI verdicts without removing config
+
+watches:
+  - name: "iphone 13"
+    enabled: true
+    marketplace_url: "https://www.facebook.com/marketplace/london/search?query=iphone+13&exact=false"
+    max_price: 300
+    notify_on_free: true
+    currency: "GBP"
+    keywords_include:
+      - "iphone"
+      - "13"
+    keywords_exclude:
+      - "case"
+      - "repair"
+      - "cracked"
+
+  - name: "office chair"
+    enabled: true
+    marketplace_url: "https://www.facebook.com/marketplace/london/search?query=office+chair&exact=false"
+    max_price: 40
+    notify_on_free: true
+    currency: "GBP"
+    keywords_include:
+      - "chair"
+    keywords_exclude: []
