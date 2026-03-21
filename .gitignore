@@ -1,0 +1,26 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+.venv/
+
+# Config with credentials
+config.yaml
+
+# Runtime data
+data/browser_state.json
+data/seen_listings.json
+
+# Logs
+logs/*.log
+
+# Build
+*.egg-info/
+dist/
+build/
