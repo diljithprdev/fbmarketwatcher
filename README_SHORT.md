@@ -3,13 +3,9 @@
 ## 1. Create and activate virtual environment
 
 ```bash
-cd /Volumes/MacData/python/MarketWatcher
-
-/usr/local/bin/python3.11 -m venv .venv
+python3.11 -m venv .venv
 source .venv/bin/activate
 ```
-
-Your prompt will show `(.venv)` when active. Run `source .venv/bin/activate` every new terminal session.
 
 ## 2. Install dependencies
 
@@ -25,10 +21,10 @@ cp config.example.yaml config.yaml
 ```
 
 Edit `config.yaml`:
-- `telegram.bot_token` — from @BotFather
-- `telegram.chat_id` — numeric ID from @userinfobot
-- `openai.api_key` — your OpenAI key (set `enabled: false` to skip AI verdicts)
-- `watches` — your search URLs and max prices
+- `telegram.bot_token`: from @BotFather
+- `telegram.chat_id`: numeric ID from @userinfobot
+- `openai.api_key`: OpenAI key (set `enabled: false` to skip verdicts)
+- `watches`: search URLs and max prices
 
 ## 4. First run — log in to Facebook
 
@@ -57,7 +53,7 @@ python -m marketwatcher.main --config config.yaml --loop
 python -m marketwatcher.main --config config.yaml --once --debug
 ```
 
-Stop with `Ctrl+C` — state is saved cleanly on exit.
+Stop with `Ctrl+C`.
 
 ## 6. Manage seen listings
 
@@ -78,8 +74,7 @@ echo '{"seen": []}' > data/seen_listings.json
 
 ## Notes
 
-- Seen listings are tracked in `data/seen_listings.json` — no duplicate notifications across restarts
-- AI verdict is fetched from ChatGPT for every match and included in the Telegram message
+- Seen listings are tracked in `data/seen_listings.json`
+- Verdict is included in the Telegram message when OpenAI is enabled
 - Logs are written to `logs/marketwatcher.log`
 - If the Facebook session expires, delete `data/browser_state.json` and repeat step 4
-- `config.yaml` contains credentials — never commit it to git

@@ -1,12 +1,12 @@
 # MarketWatcher
 
-Monitor Facebook Marketplace search results and get Telegram alerts the moment a listing appears within your price range. Each alert includes an AI verdict from ChatGPT on whether the price is below market value.
+Monitor Facebook Marketplace searches and send Telegram alerts when a listing matches price and keywords. Optional GPT verdict on deal value.
 
 ---
 
 ## What it does
 
-You tell MarketWatcher what you are looking for, how much you are willing to pay, and which words must or must not appear in the listing. It opens Marketplace in a browser, reads the search results, fetches each matching listing's description, asks ChatGPT if it is a good deal, and sends you a Telegram message. Run it once manually or leave it running in the background on a schedule.
+Define watches with a search URL, max price, and include/exclude keywords. MarketWatcher opens Marketplace in a browser, reads results, fetches matching listing descriptions, optionally scores them with GPT, and sends a Telegram message. Single run or looped schedule.
 
 ---
 
@@ -16,14 +16,12 @@ You tell MarketWatcher what you are looking for, how much you are willing to pay
 |---|---|
 | Python 3.11 or newer | Check with `python --version` |
 | A Facebook account | Must have Marketplace access in your region |
-| A Telegram bot | Free — takes two minutes to create (see below) |
+| A Telegram bot | Free, takes two minutes (see below) |
 | An OpenAI API key | For AI verdicts — optional, disable with `enabled: false` |
 
 ---
 
 ## Step 1 — Create a Telegram bot
-
-You only need to do this once.
 
 1. Open Telegram and search for **@BotFather**.
 2. Send `/newbot` and follow the prompts.
@@ -36,16 +34,13 @@ You only need to do this once.
 ## Step 2 — Install MarketWatcher
 
 ```bash
-# From the project directory, create a virtual environment with Python 3.11
-/usr/local/bin/python3.11 -m venv .venv
+# From the project directory
+python3.11 -m venv .venv
 source .venv/bin/activate
 
-# Install dependencies
 pip install -e .
 playwright install chromium
 ```
-
-The `playwright install chromium` command downloads the browser MarketWatcher controls (~150 MB, one-time only).
 
 ---
 
@@ -167,7 +162,7 @@ python -m marketwatcher.main --config config.yaml --clear-watch "iphone 13"
 echo '{"seen": []}' > data/seen_listings.json
 ```
 
-These commands exit immediately — no browser is launched.
+These commands return immediately without launching a browser.
 
 ---
 
@@ -273,19 +268,16 @@ Logs are written to both the terminal and `logs/marketwatcher.log`. The file rot
 
 ```
 MarketWatcher/
-├── config.yaml              your config — do not commit (contains credentials)
-├── config.example.yaml      safe template for new setups
-├── pyproject.toml           package definition
+├── config.example.yaml
+├── pyproject.toml
 ├── requirements.txt
-├── .gitignore
 ├── README.md
-├── README_SHORT.md          quick-start reference
-├── HANDOFF.md               context document for continuing development
+├── README_SHORT.md
 ├── data/
-│   ├── seen_listings.json   remembered listing IDs — auto-created
-│   └── browser_state.json   Facebook login session — created after first login
+│   ├── seen_listings.json
+│   └── browser_state.json
 ├── logs/
-│   └── marketwatcher.log    rotating log file
+│   └── marketwatcher.log
 └── src/marketwatcher/
     ├── main.py              CLI entry point
     ├── config.py            YAML config loader

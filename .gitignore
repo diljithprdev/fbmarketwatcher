@@ -37,3 +37,7 @@ wispbyte_setup.py
 vps-deploy/
 deploy-to-vps.sh
 diagnose.sh
+VPS-README.md
+login.py
+open_fb.py
+save_session.py
