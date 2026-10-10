@@ -7,15 +7,18 @@ __pycache__/
 *.pyo
 *.pyd
 
-# Virtual environment
+# Virtual environments
 .venv/
+venv/
+.env
+*.env
 
-# Config with credentials
+# Config with credentials - NEVER commit real keys
 config.yaml
-
-# Runtime data
 data/browser_state.json
 data/seen_listings.json
+data/
+*.log
 
 # Logs
 logs/*.log
@@ -24,3 +27,13 @@ logs/*.log
 *.egg-info/
 dist/
 build/
+
+# Local deploy / helper clutter - keep out of portfolio repo
+*.bat
+*.vbs
+*.zip
+wispbyte-diagnose.txt
+wispbyte_setup.py
+vps-deploy/
+deploy-to-vps.sh
+diagnose.sh

@@ -10,6 +10,8 @@ from .models import ScannerConfig
 
 log = logging.getLogger("marketwatcher")
 
+PROFILE_DIR = str(Path("data/chrome_profile").resolve())
+
 
 class MarketplaceBrowser:
     """Manages a single Playwright browser instance across scan cycles."""
@@ -26,9 +28,11 @@ class MarketplaceBrowser:
 
     def start(self) -> None:
         self._playwright = sync_playwright().start()
-        self._browser = self._playwright.chromium.launch(headless=self._config.headless)
-        self._context = self._make_context()
-        log.info("Browser started (headless=%s)", self._config.headless)
+        self._context = self._playwright.chromium.launch_persistent_context(
+            user_data_dir=PROFILE_DIR,
+            headless=self._config.headless,
+        )
+        log.info("Browser started (headless=%s, profile=%s)", self._config.headless, PROFILE_DIR)
 
     def _make_context(self) -> BrowserContext:
         storage_path = Path(self._config.storage_state_path)
@@ -39,20 +43,13 @@ class MarketplaceBrowser:
         return self._browser.new_context()  # type: ignore[union-attr]
 
     def save_session(self) -> None:
-        """Persist current browser storage state for future runs."""
-        if self._context is None:
-            return
-        storage_path = Path(self._config.storage_state_path)
-        storage_path.parent.mkdir(parents=True, exist_ok=True)
-        self._context.storage_state(path=str(storage_path))
-        log.info("Browser session saved to %s", storage_path)
+        """Persistent context saves automatically — this is a no-op."""
+        log.debug("Session auto-saved via persistent context.")
 
     def close(self) -> None:
         try:
             if self._context:
                 self._context.close()
-            if self._browser:
-                self._browser.close()
             if self._playwright:
                 self._playwright.stop()
         except Exception as exc:  # noqa: BLE001

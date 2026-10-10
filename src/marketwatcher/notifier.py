@@ -50,3 +50,25 @@ def send_notification(listing: Listing, config: TelegramConfig) -> bool:
     except requests.RequestException as exc:
         log.error("Telegram send failed for listing %s: %s", listing.stable_id, exc)
         return False
+
+
+def send_no_new_listings(watch_name: str, config: TelegramConfig) -> bool:
+    """Send a 'no new listings' status message."""
+    if not config.enabled:
+        return False
+
+    message = f"No new listings found for {watch_name}."
+    url = _TELEGRAM_API.format(token=config.bot_token)
+
+    try:
+        resp = requests.post(
+            url,
+            json={"chat_id": config.chat_id, "text": message},
+            timeout=_TIMEOUT,
+        )
+        resp.raise_for_status()
+        log.info("No-new-listings message sent for %s", watch_name)
+        return True
+    except requests.RequestException as exc:
+        log.error("Telegram send failed (no-new): %s", exc)
+        return False

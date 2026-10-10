@@ -5,7 +5,7 @@ import logging
 from .analyzer import analyze_listing
 from .marketplace import MarketplaceBrowser
 from .models import AppConfig
-from .notifier import send_notification
+from .notifier import send_notification, send_no_new_listings
 from .parser import matches_watch, parse_listings
 from .state import SeenState
 
@@ -74,5 +74,7 @@ def run_scan_cycle(config: AppConfig, browser: MarketplaceBrowser, state: SeenSt
         if notified_this_cycle:
             state.save()
             log.info("[%s] Notified %d new listings.", watch.name, len(notified_this_cycle))
+        else:
+            send_no_new_listings(watch.name, config.telegram)
 
     log.info("Scan cycle complete")
